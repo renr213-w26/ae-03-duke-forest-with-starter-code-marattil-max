@@ -1,5 +1,8 @@
 ---
 title: "AE 03: Duke Forest + data visualization"
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
 ```{r}
@@ -25,8 +28,9 @@ Luckily, you can help them answer this question with data visualization!
 #| label: garage
 #| eval: false
 
-duke_forest |>
+duke_forest <- duke_forest |>
   mutate(garage = if_else(str_detect(parking, "Garage"),   "Garage", "No garage"))
+
 ```
 
 -   Then, facet by `garage` and use different colors for the two facets.
@@ -37,10 +41,20 @@ duke_forest |>
 ```{r}
 #| label: price-garage
 
-# add code here
+ggplot(duke_forest, aes( x = price, fill = garage, colour = garage)) +
+  geom_histogram(binwidth = 100000)+
+  facet_wrap(~garage) +
+  labs(
+    x = "Price",
+    y = "Number of Houses",
+    title = "House Prices by Garage Presence"
+  )
+
 ```
 
-Add narrative here...
+Interpretations of the histogram allow for the conclusion that houses without garages have the potential to be more appealing to the consumer.
+This is because the distribution of homes without garages lies on the lower end of the price scale (\$400,000 and \$700,000), with more frequency of houses.
+Comparatively, there appear to be fewer houses with garages in Duke Forest and, of the houses, they are on the higher end of the price scale (\$600,000 to \$900,000).
 
 ::: callout-important
 Now is a good time to render, commit, and push.
@@ -66,11 +80,19 @@ Once again, data visualization skills to the rescue!
 
 ```{r}
 #| label: price-area
-
-# add code here
+ggplot(duke_forest, aes(x = area, y = price, colour = year_built))+
+  geom_point()+
+  geom_smooth(se = FALSE)+
+  labs(
+     x = "Area",
+    y = "Price" ,
+    title = "House Price vs. Area by Year Built"
+  )
 ```
 
-Add narrative here...
+-   Claim 1: Based on the trendline produce, we see and general positive relationship between Area and Price. This we can conclude a correlation that an increase in area for a house lead to the house being priced higher.
+-   Claim 2: The plots show significant overlap in price for older house and new houses in the \$400000 - \$700000 range, therefore it cannot be concluded that year of build contributes significantly to price.
+-   Claim 3: Considering plots that represent the newest built houses, it shows that they stay within a limited range near the middle for both area and price. Thus the data is unable to confirm the claim.
 
 ::: callout-important
 Now is a good time to render, commit, and push.
